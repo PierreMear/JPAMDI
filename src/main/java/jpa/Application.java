@@ -1,13 +1,12 @@
 package jpa;
 
 import org.springframework.boot.SpringApplication;
-import jpa;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringApp {
+public class Application {
 
-  public static void main(String... args) {
-    SpringApplication.run(SpringApp.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 }

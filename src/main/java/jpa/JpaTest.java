@@ -21,9 +21,9 @@ public class JpaTest {
 		Participant. class ).getResultList().size();
 		if (numOfParticipants == 0) {
 			Meeting meeting = new Meeting( "java" );
-			manager .persist(meeting);
-			manager .persist( new Participant("Gipsz", "Jakab", "jakab.gipsz@enterprise.com" ,meeting));
-			manager .persist( new Participant("Nemo", "Captain", "captain.nemo@enterprise.com" ,meeting));
+			manager.persist(meeting);
+			manager.persist( new Participant("Gipsz", "Jakab", "jakab.gipsz@enterprise.com" ,meeting));
+			manager.persist( new Participant("Nemo", "Captain", "captain.nemo@enterprise.com" ,meeting));
 		}
 	}
 
