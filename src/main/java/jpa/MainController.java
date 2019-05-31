@@ -49,7 +49,7 @@ public class MainController {
 		p.setName(name);
 		p.setEmail(email);
 		participantRepository.save(p);
-		return participantRepository.findById(id);
+		return participantRepository.findById(p.getId());
 	}
 
 	@GetMapping(path="/participants")
@@ -115,7 +115,7 @@ public class MainController {
 		Meeting m = new Meeting();
 		m.setName(name);
 		meetingRepository.save(m);
-		return meetingRepository.findById(id);
+		return meetingRepository.findById(m.getId());
 	}
 
 	@DeleteMapping("/meetings/{id}")
