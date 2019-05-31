@@ -13,6 +13,13 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Calendar;
+
 import jpa.Participant;
 import jpa.ParticipantRepository;
 
@@ -33,7 +40,7 @@ public class MainController {
 	private ParticipantRepository participantRepository;
 
 	@PostMapping(path="/participants/add") // Map ONLY CREATE Requests
-	public @ResponseBody String addNewParticipant (@RequestParam String name
+	public @ResponseBody Participant addNewParticipant (@RequestParam String name
 			, @RequestParam String email) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
@@ -42,7 +49,7 @@ public class MainController {
 		p.setName(name);
 		p.setEmail(email);
 		participantRepository.save(p);
-		return "Saved";
+		return participantRepository.findById(id);
 	}
 
 	@GetMapping(path="/participants")
@@ -58,8 +65,9 @@ public class MainController {
 	}
 
 	@PutMapping("/participants/{id}")
-	public @ResponseBody String updateParticipant(@PathVariable long id, @RequestParam(value="surname",required=false) String surname,
-		@RequestParam(value="name",required=false) String name,@RequestParam(value="email",required=false) String email,@RequestParam(value="meeting",required=false) Long meeting) {
+	public @ResponseBody Participant updateParticipant(@PathVariable long id, @RequestParam(value="surname",required=false) String surname,
+		@RequestParam(value="name",required=false) String name,@RequestParam(value="email",required=false) String email,
+		@RequestParam(value="meeting",required=false) Long meeting) {
 
 		Optional<Participant> participantOptional = participantRepository.findById(id);
 
@@ -85,9 +93,9 @@ public class MainController {
 		if(email != null)
 			p.setEmail(email);
 
-			participantRepository.save(p);
+		participantRepository.save(p);
 
-		return "Updated";
+		return participantRepository.findById(id);
 	}
 
 	@Autowired
@@ -100,33 +108,51 @@ public class MainController {
 	}
 
 	@PostMapping(path="/meetings/add") // Map ONLY CREATE Requests
-	public @ResponseBody String addNewMeeting (@RequestParam String name) {
+	public @ResponseBody Meeting addNewMeeting (@RequestParam String name) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 
 		Meeting m = new Meeting();
 		m.setName(name);
 		meetingRepository.save(m);
-		return "Saved";
+		return meetingRepository.findById(id);
 	}
 
 	@DeleteMapping("/meetings/{id}")
-	public void deleteMeeting(@PathVariable long id) {
+	public @ResponseBody String deleteMeeting(@PathVariable long id) {
 		meetingRepository.deleteById(id);
+		return "Deleted";
 	}
 
 	@PutMapping("/meetings/{id}")
-	public @ResponseBody String updateMeeting(@RequestBody Meeting meeting, @PathVariable long id) {
+	public @ResponseBody Meeting updateMeeting(@PathVariable long id, @RequestParam(value="name",required=false) String name,
+	@RequestParam(value="meal",required=false) Boolean meal,@RequestParam(value="participants",required=false) List<Participant> participants,
+	@RequestParam(value="start",required=false) Calendar start,@RequestParam(value="start",required=false) Calendar end) {
 
 		Optional<Meeting> meetingOptional = meetingRepository.findById(id);
 
 		if (!meetingOptional.isPresent())
 			return "Meeting not found";
 
-		meeting.setId(id);
+			Meeting m = meetingRepository.findById(id).get();
 
-		meetingRepository.save(meeting);
+			if(name != null)
+				m.setName(name);
 
-		return "Updated";
+			if(meal != null)
+				m.setMeal(meal);
+
+			if(participants!=null)
+				m.setParticipants(participants);
+
+			if(start != null)
+				m.setStart(start);
+
+			if(end != null)
+				m.setEnd(end);
+
+			meetingRepository.save(m);
+
+		return meetingRepository.findById(id);
 	}
 }
