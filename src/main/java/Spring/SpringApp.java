@@ -1,7 +1,6 @@
 package jpa;
 
 import org.springframework.boot.SpringApplication;
-import jpa;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
