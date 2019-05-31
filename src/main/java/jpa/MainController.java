@@ -40,7 +40,7 @@ public class MainController {
 	private ParticipantRepository participantRepository;
 
 	@PostMapping(path="/participants/add") // Map ONLY CREATE Requests
-	public @ResponseBody Participant addNewParticipant (@RequestParam String name
+	public @ResponseBody Optional<Participant> addNewParticipant (@RequestParam String name
 			, @RequestParam String email) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
@@ -65,14 +65,14 @@ public class MainController {
 	}
 
 	@PutMapping("/participants/{id}")
-	public @ResponseBody Participant updateParticipant(@PathVariable long id, @RequestParam(value="surname",required=false) String surname,
+	public @ResponseBody Optional<Participant> updateParticipant(@PathVariable long id, @RequestParam(value="surname",required=false) String surname,
 		@RequestParam(value="name",required=false) String name,@RequestParam(value="email",required=false) String email,
 		@RequestParam(value="meeting",required=false) Long meeting) {
 
 		Optional<Participant> participantOptional = participantRepository.findById(id);
 
 		if (!participantOptional.isPresent())
-			return "Participant not found";
+			return participantOptional;
 
 		Participant p = participantRepository.findById(id).get();
 
@@ -108,7 +108,7 @@ public class MainController {
 	}
 
 	@PostMapping(path="/meetings/add") // Map ONLY CREATE Requests
-	public @ResponseBody Meeting addNewMeeting (@RequestParam String name) {
+	public @ResponseBody Optional<Meeting> addNewMeeting (@RequestParam String name) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 
@@ -125,14 +125,14 @@ public class MainController {
 	}
 
 	@PutMapping("/meetings/{id}")
-	public @ResponseBody Meeting updateMeeting(@PathVariable long id, @RequestParam(value="name",required=false) String name,
+	public @ResponseBody Optional<Meeting> updateMeeting(@PathVariable long id, @RequestParam(value="name",required=false) String name,
 	@RequestParam(value="meal",required=false) Boolean meal,@RequestParam(value="participants",required=false) List<Participant> participants,
 	@RequestParam(value="start",required=false) Calendar start,@RequestParam(value="start",required=false) Calendar end) {
 
 		Optional<Meeting> meetingOptional = meetingRepository.findById(id);
 
 		if (!meetingOptional.isPresent())
-			return "Meeting not found";
+			return meetingOptional;
 
 			Meeting m = meetingRepository.findById(id).get();
 
