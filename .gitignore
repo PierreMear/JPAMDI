@@ -30,4 +30,9 @@ buildNumber.properties
 
 # End of https://www.gitignore.io/api/git,maven
 
+data/test.tmp/test.lck
+data/test.tmp/test.log
+data/test.tmp/test.properties
+data/test.tmp/test.script
 data/
+data/test.tmp/
