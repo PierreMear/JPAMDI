@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,9 +101,13 @@ public class MainController {
 		Participant p = participantRepository.findById(id).get();
 
 		if(meeting != null){
-			Optional<Meeting> meetingOptional = meetingRepository.findById(meeting);
-			if(meetingOptional.isPresent())
-				p.setMeeting(meetingRepository.findById(meeting).get());
+			if(meeting == 0){
+				p.setMeeting(null);
+			} else {
+				Optional<Meeting> meetingOptional = meetingRepository.findById(meeting);
+				if(meetingOptional.isPresent())
+					p.setMeeting(meetingRepository.findById(meeting).get());
+			}
 		}
 
 		if(surname != null)
@@ -150,7 +155,8 @@ public class MainController {
 	@PutMapping("/meetings/{id}")
 	public @ResponseBody Optional<Meeting> updateMeeting(@PathVariable long id, @RequestParam(value="name",required=false) String name,
 	@RequestParam(value="meal",required=false) Boolean meal,@RequestParam(value="participants",required=false) List<Participant> participants,
-	@RequestParam(value="start",required=false) Calendar start,@RequestParam(value="start",required=false) Calendar end) {
+	@RequestParam(value="start",required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Calendar start,
+	@RequestParam(value="end",required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Calendar end) {
 
 		Optional<Meeting> meetingOptional = meetingRepository.findById(id);
 

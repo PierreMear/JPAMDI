@@ -54,9 +54,9 @@ Vue.component('meeting', {
     <tr>
         <td>{{meeting.name}}</td>
         <td v-if="meeting.start==null"></td>
-        <td>{{meeting.start}}</td>
+        <td v-else>{{meeting.start.substring(0,10)}}</td>
         <td v-if="meeting.end==null"></td>
-        <td>{{meeting.end}}</td>
+        <td v-else>{{meeting.end.substring(0,10)}}</td>
         <td v-if="meeting.meal==null"></td>
         <td v-else>{{meeting.meal}}</td>
         <td><a :href="'#/meetings/'+meeting.id">Edit</a></td>

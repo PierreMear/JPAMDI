@@ -9,7 +9,7 @@ Vue.component('user-detail', {
 	<label for="surname-to-edit">Surname</label>
 	<input v-if="user.surname!=null" type="text" class="form-control" id="surname-to-edit" :value="user.surname">
 	<input v-else type="text" class="form-control" id="surname-to-edit">
-        <button @click="save">Save</button>
+        <button @click="save" class="btn btn-primary">Save</button>
     </div>
     `,
     methods: {
