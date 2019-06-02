@@ -41,17 +41,16 @@ Vue.component('users-list', {
             const email = $("#email-to-add").val()
 			$.ajax({
 				type: "POST",
-				url: serverAddress + "/home/participants/add?name=" + name + "&email=" + email,
-				success: (data) => users.push(JSON.parse(data))
+				url: "/home/participants/add?name=" + name + "&email=" + email,
+				success: function(data){
+				    showUserList()
+				}
 			});
         }
     }
 })
 
 Vue.component('user', {
-    // The todo-item component now accepts a
-    // "prop", which is like a custom attribute.
-    // This prop is called todo.
     props: ['user'],
     template: `
     <tr>
@@ -59,18 +58,17 @@ Vue.component('user', {
         <td>{{user.email}}</td>
         <td v-if="user.surname==null"></td>
         <td v-else>{{user.surname}}</td>
-        <td><a href="#/users/{{user.id}}">Edit</a></td>
+        <td><a :href="'#/users/'+user.id">Edit</a></td>
         <td><button class="btn btn-danger" @click="remove">Delete</button></td>
     </tr>
     `,
     methods: {
         remove: function () {
-        	const index = users.indexOf(this.user)
         	$.ajax({
-				type: "DELETE",
-				url: serverAddress + "/home/participants/" + users[index].id,
-				success: () => users.splice(index, 1)
-			});
+			type: "DELETE",
+			url: "/home/participants/" + this.user.id,
+			success: () => showUserList()
+		});
         }
     }
 })

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.core.io.ClassPathResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,10 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Calendar;
+
+import java.nio.file.*;
+import java.net.URL;
+import java.io.File;
 
 import jpa.Participant;
 import jpa.ParticipantRepository;
@@ -32,8 +37,26 @@ public class MainController {
 
 	@GetMapping(path="/")
 	public @ResponseBody String getHome() {
-		// This returns a JSON or XML with the users
-		return "Welcome !";
+		String html = "";
+		try {
+			File ressource = new ClassPathResource("index.html").getFile();
+			html = new String(Files.readAllBytes(ressource.toPath()));
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return html;
+	}
+	
+	@GetMapping(path="/{name}.js")
+	public @ResponseBody String getJS(@PathVariable String name) {
+		String html = "";
+		try {
+			File ressource = new ClassPathResource("scripts/"+name+".js").getFile();
+			html = new String(Files.readAllBytes(ressource.toPath()));
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return html;
 	}
 
 	@Autowired

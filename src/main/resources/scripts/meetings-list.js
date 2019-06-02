@@ -39,17 +39,16 @@ Vue.component('meetings-list', {
             const name = $("#meeting-to-add").val()
             $.ajax({
 				type: "POST",
-				url: serverAddress + "/home/meeting/add?name=" + name,
-				success: (data) => meetings.push(JSON.parse(data))
+				url: "/home/meetings/add?name=" + name,
+				success: function(data){
+				    showMeetingList()
+				}
 			});
         }
     }
 })
 
 Vue.component('meeting', {
-    // The todo-item component now accepts a
-    // "prop", which is like a custom attribute.
-    // This prop is called todo.
     props: ['meeting'],
     template: `
     <tr>
@@ -60,18 +59,17 @@ Vue.component('meeting', {
         <td>{{meeting.end}}</td>
         <td v-if="meeting.meal==null"></td>
         <td v-else>{{meeting.meal}}</td>
-        <td><a href="#/meetings/{{meeting.id}}">Edit</a></td>
+        <td><a :href="'#/meetings/'meeting.id">Edit</a></td>
         <td><button class="btn btn-danger" @click="remove">Delete</button></td>
     </tr>
     `,
     methods: {
         remove: function () {
-        	const index = meetings.indexOf(this.meeting)
         	$.ajax({
-				type: "DELETE",
-				url: serverAddress + "/home/participants/" + meetings[index].id,
-				success: () => meetings.splice(index, 1)
-			});
+			type: "DELETE",
+			url: "/home/meetings/" + this.meeting.id,
+			success: () => showMeetingList()
+		});
         }
     }
 })

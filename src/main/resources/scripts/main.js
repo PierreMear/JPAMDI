@@ -1,8 +1,7 @@
 var application = null;
-const serverAddress = "http://192.168.0.45:9002"
 
-const users = []
-const meetings = []
+var users = []
+var meetings = []
 
 function router() {
     if ('content' in document.createElement('template')) {
@@ -22,32 +21,48 @@ function routeUser() {
     if (userRequestedRoute === '' || userRequestedRoute === '/home') {
         app.innerHTML = ""//<todo-list :list='list'></todo-list>"
     } else if (userRequestedRoute === '/users') {
-        $.ajax({
-            type: "GET",
-            url: serverAddress + "/home/participants",
-            success: (data) => users.push(JSON.parse(data))
-        });
-        app.innerHTML = "<users-list :list='userList'></users-list>"
+        showUserList()
     } else if (userRequestedRoute === '/meetings') {
-        $.ajax({
-            type: "GET",
-            url: serverAddress + "/home/meetings",
-            success: (data) => users.push(JSON.parse(data))
-        });
-        app.innerHTML = "<meetings-list :list='meetingList'></meetings-list>"
-    } else if (userRequestedRoute.startsWith('/todo-detail')) {
-        const todoId = userRequestedRoute.substring('/todo-detail/'.length)
-        app.innerHTML = "<detail></detail>"
+        showMeetingList()
+    } else if (userRequestedRoute.startsWith('/user-detail')) {
+        const userId = parseInt(userRequestedRoute.substring('/todo-detail/'.length))
+        let u = null
+        for(var i; i < users.length; i++){
+            if(users[i].id == userId){ u = users[i] }
+        }
+        if(u == null){
+            app.innerHTML = "<notfound></notfound>"
+        }else{
+            app.innerHTML = "<user-detail :user="u"></user-detail>"
+        }
     } else {
         app.innerHTML = "<notfound></notfound>"
     }
-    application = new Vue({
-      el: '#app',
-      data: {
-        userList: users,
-        meetingList: meetings
-      }
-    })
+}
+
+function showUserList(){
+    $.ajax({
+        type: "GET",
+        url: "/home/participants",
+        success: function(data){
+            users = data
+            app.innerHTML = "<users-list :list='userList'></users-list>"
+            application = new Vue({ el: '#app', data: { userList: users, meetingList: meetings}})
+        }
+    });
+}
+
+function showMeetingList(){
+    $.ajax({
+        type: "GET",
+        url: "/home/meetings",
+        success: function(data){
+            meetings = data
+            app.innerHTML = "<meetings-list :list='meetingList'></meetings-list>"
+            application = new Vue({ el: '#app', data: { userList: users, meetingList: meetings}})
+        }
+    });
+    
 }
 
 window.onload = () => router()
