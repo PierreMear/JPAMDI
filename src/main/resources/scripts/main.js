@@ -24,19 +24,24 @@ function routeUser() {
         showUserList()
     } else if (userRequestedRoute === '/meetings') {
         showMeetingList()
-    } else if (userRequestedRoute.startsWith('/user-detail')) {
-        const userId = parseInt(userRequestedRoute.substring('/todo-detail/'.length))
+    } else if (userRequestedRoute.startsWith('/users')) {
+        console.log("good route")
+        const userId = parseInt(userRequestedRoute.substring('/users/'.length))
+        console.log("id : "+userId)
         let u = null
-        for(var i; i < users.length; i++){
+        for(var i = 0; i < users.length; i++){
+            console.log("users id : "+users[i].id)
             if(users[i].id == userId){ u = users[i] }
         }
         if(u == null){
             app.innerHTML = "<notfound></notfound>"
         }else{
-            app.innerHTML = "<user-detail :user="u"></user-detail>"
+            app.innerHTML = "<user-detail :user='user'></user-detail>"
         }
+        application = new Vue({ el: '#app', data: { user: u}})
     } else {
         app.innerHTML = "<notfound></notfound>"
+        application = new Vue({ el: '#app'})
     }
 }
 

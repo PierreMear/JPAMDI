@@ -59,7 +59,7 @@ Vue.component('meeting', {
         <td>{{meeting.end}}</td>
         <td v-if="meeting.meal==null"></td>
         <td v-else>{{meeting.meal}}</td>
-        <td><a :href="'#/meetings/'meeting.id">Edit</a></td>
+        <td><a :href="'#/meetings/'+meeting.id">Edit</a></td>
         <td><button class="btn btn-danger" @click="remove">Delete</button></td>
     </tr>
     `,
